@@ -7,7 +7,11 @@
 
       <v-row class="d-flex align-center justify-center">
         <v-col cols="auto">
-          <h1>Crook County Property Search</h1>
+          <v-row class="d-flex align-center justify-center" style="margin-bottom: 20px;">
+            <v-img width="90" src="src/assets/cc_logo.png" />
+            <h1>Crook County Property Search</h1>
+          </v-row>
+
           <v-form v-model="form"
                   @submit.prevent="onSubmit">
             <v-text-field
@@ -39,6 +43,7 @@
                     :items="filteredData"
                     :headers="headers"
                     class="elevation-10">
+
             </v-data-table>
             <div class="d-flex flex-wrap">
                 <div v-for="property in filteredData" :key="property.id">
