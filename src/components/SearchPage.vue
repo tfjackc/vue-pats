@@ -30,7 +30,7 @@
           </v-form>
         </v-col>
         <v-col cols="auto">
-            <v-data-table
+            <v-data-table v-if="filteredData.length > 0"
                     v-model:items-per-page="itemsPerPage"
                     :items="filteredData"
                     :headers="headers"
@@ -38,7 +38,6 @@
                     @click:row="rowClick"
                     :single-select="true">
             </v-data-table>
-<!--            <v-progress-linear v-show="progressBar" slot="progress" color="blue" indeterminate></v-progress-linear>-->
             <div class="d-flex flex-wrap">
                 <div v-for="property in filteredData" :key="property.id">
                 </div>
@@ -83,14 +82,11 @@ export default {
   }),
   methods: {
       onSubmit ()  {
-
           if (this.searchedValue) {
-              console.log(this.searchedValue);
-              //this.getData(this.searchedValue);
-              this.tableSearchResults(this.searchedValue);
+            console.log(this.searchedValue);
+            //this.getData(this.searchedValue);
+            this.tableSearchResults(this.searchedValue);
           }
-
-
       },
       async tableSearchResults(value) {
           this.filteredData = []
