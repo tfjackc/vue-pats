@@ -133,6 +133,7 @@ export default {
       },
     rowClick(item, row) {
       console.log(row.item.account_id);
+      
     }
   }
 }
