@@ -1,7 +1,7 @@
 <template>
-  <SearchPage />
+  <SearchComponent />
 </template>
 
 <script setup>
-  import SearchPage from '@/components/SearchPage.vue'
+  import SearchComponent from '@/components/SearchComponent.vue'
 </script>
