@@ -133,7 +133,8 @@ export default {
       },
     rowClick(item, row) {
       console.log(row.item.account_id);
-      
+      this.$router.push(`/summary/${row.item.account_id}`)
+
     }
   }
 }
