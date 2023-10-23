@@ -1,17 +1,13 @@
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-center text-center fill-height">
-
-
       <div class="py-14" />
-
       <v-row class="d-flex align-center justify-center">
         <v-col cols="auto">
           <v-row class="d-flex align-center justify-center" style="margin-bottom: 20px;">
             <v-img width="90" src="src/assets/cc_logo.png" />
             <h1>Crook County Property Search</h1>
           </v-row>
-
           <v-form v-model="form"
                   @submit.prevent="onSubmit">
             <v-text-field
@@ -21,7 +17,6 @@
               :rules="[required]"
               clearable=""
             ></v-text-field>
-
             <v-btn
               :disabled="!form"
               :loading="loading"
@@ -29,27 +24,25 @@
               color="success"
               size="large"
               type="submit"
-              variant="elevated"
-            >
+              variant="elevated">
               Submit
             </v-btn>
           </v-form>
-
         </v-col>
-
         <v-col cols="auto">
             <v-data-table
                     v-model:items-per-page="itemsPerPage"
                     :items="filteredData"
                     :headers="headers"
-                    class="elevation-10">
-
+                    class="elevation-10"
+                    @click:row="rowClick"
+                    :single-select="true">
             </v-data-table>
+<!--            <v-progress-linear v-show="progressBar" slot="progress" color="blue" indeterminate></v-progress-linear>-->
             <div class="d-flex flex-wrap">
                 <div v-for="property in filteredData" :key="property.id">
                 </div>
             </div>
-
         </v-col>
       </v-row>
     </v-responsive>
@@ -76,6 +69,7 @@ export default {
     searchedValue: '',
     filteredData: [],
     itemsPerPage: 10,
+   // tableDetails: [],
     headers:
            [
               {title: 'Map / Taxlot', key: 'map_taxlot', align: 'center'},
@@ -134,15 +128,16 @@ export default {
                       const matchingTableItem = tableData.find(tableItem => tableItem.attributes.account_id === searchItemAttributes.account_id);
                       if (matchingTableItem) {
                           this.filteredData.push({...matchingTableItem.attributes });
-                          console.log(this.filteredData);
                       }
                   }
               }
           } catch (error) {
               console.error("An error occurred:", error);
           }
-      }
+      },
+    rowClick(item, row) {
+      console.log(row.item.account_id);
+    }
   }
 }
-
 </script>
