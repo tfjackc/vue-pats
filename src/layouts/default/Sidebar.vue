@@ -1,6 +1,6 @@
 <template>
       <v-navigation-drawer>
-        <v-list density="compact" nav>
+        <v-list density="compact">
           <v-list-item prepend-icon="mdi-database-outline" title="Summary" value="summary"></v-list-item>
           <v-list-item prepend-icon="mdi-chart-line" title="Valuation" value="valuation"></v-list-item>
           <v-list-item prepend-icon="mdi-bank" title="Tax Information" value="tax_information"></v-list-item>
@@ -20,5 +20,3 @@
 <script setup>
 
 </script>
-
-

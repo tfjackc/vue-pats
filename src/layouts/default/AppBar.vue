@@ -1,7 +1,9 @@
 <template>
   <v-app-bar  :elevation="24">
     <v-app-bar-title>
+      <v-btn :to="{ name: 'Home'}" >
       <v-icon icon="mdi-home" />
+      </v-btn>
       Crook County Property Search
     </v-app-bar-title>
     <v-btn @click="toggleTheme"><v-icon icon="mdi-theme-light-dark" /></v-btn>
