@@ -9,6 +9,7 @@
 //   $color-pack: false
 // );
 
-//@use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@use 'vuetify/settings' with (
+   $list-item-nav-title-font-size: 16px,
+   $icon-size: x-large
+ );

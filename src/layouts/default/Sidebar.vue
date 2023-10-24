@@ -1,20 +1,5 @@
 <template>
-
-      <v-navigation-drawer
-        expand-on-hover
-        rail
-        style="min-width: 56px;"
-      >
-        <v-list>
-          <v-list-item
-            prepend-icon="mdi-folder"
-            title="Account Navigation"
-            subtitle="subtitle"
-          ></v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
+      <v-navigation-drawer>
         <v-list density="compact" nav>
           <v-list-item prepend-icon="mdi-database-outline" title="Summary" value="summary"></v-list-item>
           <v-list-item prepend-icon="mdi-chart-line" title="Valuation" value="valuation"></v-list-item>
@@ -30,7 +15,6 @@
           <v-list-item prepend-icon="mdi-ruler-square-compass" title="Surveys" value="surveys"></v-list-item>
         </v-list>
       </v-navigation-drawer>
-
 </template>
 
 <script setup>
