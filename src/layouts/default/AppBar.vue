@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar  :elevation="24">
+  <v-app-bar  :elevation="2">
     <v-app-bar-title>
       <v-btn :to="{ name: 'Home'}" >
       <v-icon icon="mdi-home" />
