@@ -102,14 +102,53 @@
 
 </template>
 
+
+<script setup>
+import { ref, onBeforeMount } from 'vue';
+
+const pats_table_query = ref();
+const account_id = ref('');
+
+async function fetchData() {
+  const propUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${account_id.value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
+
+  const res = await fetch(propUrl);
+  pats_table_query.value = await res.json();
+  console.log(pats_table_query.value);
+}
+
+onBeforeMount(() => {
+  fetchData();
+});
+</script>
+
 <script>
 export default {
-  data () {
-    return {
-      account_id: this.$route.params.account_id
+  data: () => ({
+    // Initialise data
+    account_id: this.$route.params.account_id,
+    pats_table_query: []
+  }),
+  methods: {
+async fetchData(value) {
+  const propUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
+
+  const res = await fetch(propUrl); // Assuming this is a GET request
+
+  pats_table_query.value = await res.json();
+  console.log(pats_table_query.value);
+
     }
-  }
+  },
+
 }
+//   data () {
+//     return {
+//       account_id: this.$route.params.account_id,
+//       pats_table_query: []
+//     }
+//   }
+// }
 </script>
 
 <style>
