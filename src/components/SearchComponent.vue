@@ -30,17 +30,20 @@
           </v-form>
         </v-col>
         <v-col cols="auto">
-            <v-data-table v-if="filteredData.length > 0"
+            <v-fade-transition>
+            <v-data-table
+                    v-if="filteredData.length > 0"
                     v-model:items-per-page="itemsPerPage"
                     :items="filteredData"
                     :headers="headers"
                     class="elevation-10"
+                    :hover=true
                     @click:row="rowClick"
-                    :single-select="true">
+                    >
             </v-data-table>
+            </v-fade-transition>
             <div class="d-flex flex-wrap">
-                <div v-for="property in filteredData" :key="property.id">
-                </div>
+                <div v-for="property in filteredData" :key="property.id"></div>
             </div>
         </v-col>
       </v-row>
@@ -63,12 +66,12 @@ function required (v) {
 import axios from 'axios';
 export default {
   data: () => ({
+    // Initialise data
     form: false,
     loading: false,
     searchedValue: '',
     filteredData: [],
     itemsPerPage: 10,
-   // tableDetails: [],
     headers:
            [
               {title: 'Map / Taxlot', key: 'map_taxlot', align: 'center'},
@@ -82,17 +85,20 @@ export default {
   }),
   methods: {
       onSubmit ()  {
+          // Push the searched value into the tableSearchResults function
           if (this.searchedValue) {
-            console.log(this.searchedValue);
-            //this.getData(this.searchedValue);
+            console.log(`Searched Value: ${this.searchedValue}`)
             this.tableSearchResults(this.searchedValue);
           }
       },
       async tableSearchResults(value) {
+          // This function queries the PATS tables based on the search bar (this.searchedValue)
           this.filteredData = []
           const splitValue = value.toUpperCase().split(" ");
 
+          // PATS Property Table
           const propUrl = "https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query";
+          // PATS Search Table
           const propSearchUrl = "https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/19/query";
 
           // Define the query parameters
@@ -131,10 +137,10 @@ export default {
               console.error("An error occurred:", error);
           }
       },
+    // Click data table row to go to the summary page
     rowClick(item, row) {
       console.log(row.item.account_id);
       this.$router.push(`/summary/${row.item.account_id}`)
-
     }
   }
 }
