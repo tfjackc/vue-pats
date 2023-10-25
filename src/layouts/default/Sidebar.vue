@@ -1,8 +1,16 @@
 <template>
       <v-navigation-drawer>
         <v-list density="compact">
-          <v-list-item prepend-icon="mdi-database-outline" title="Summary" value="summary"></v-list-item>
-          <v-list-item prepend-icon="mdi-chart-line" title="Valuation" value="valuation"></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-database-outline"
+            title="Summary"
+            value="summary"
+            router :to="{ name : 'SummaryPage'}"></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-chart-line"
+            title="Valuation"
+            value="valuation"
+            router :to="{ name : 'ValuationPage'}"></v-list-item>
           <v-list-item prepend-icon="mdi-bank" title="Tax Information" value="tax_information"></v-list-item>
           <v-list-item prepend-icon="mdi-account-cash-outline" title="Sales" value="sales"></v-list-item>
           <v-list-item prepend-icon="mdi-domain" title="Land and Structures" value="land_and_structures"></v-list-item>

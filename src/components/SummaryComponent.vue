@@ -1,5 +1,5 @@
 <template>
-
+  <v-fade-transition>
   <v-container class="justify-center">
     <v-col>
     <v-row class="d-flex align-center justify-center">
@@ -169,7 +169,7 @@
     </v-col>
   </v-container>
 
-
+    </v-fade-transition>
 </template>
 
 <script setup>
@@ -189,7 +189,6 @@ onMounted(() => {
 async function loadSummaryData(value) {
 
   const propertyTableUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
-  const zoneTableUrl = ''
 
   axios.get(propertyTableUrl)
     .then((response) => {

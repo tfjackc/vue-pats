@@ -18,6 +18,11 @@ const routes = [
         path: '/summary/:account_id',
         name: 'SummaryPage',
         component: () => import('@/views/SummaryPage.vue')
+      },
+      {
+        path: '/valuation/:account_id',
+        name: 'ValuationPage',
+        component: () => import('@/views/ValuationPage.vue')
       }
     ],
   },
