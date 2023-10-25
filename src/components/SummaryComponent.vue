@@ -2,7 +2,7 @@
 
   <v-container>
     <v-row class="d-flex align-center justify-center">
-    <v-icon icon="mdi-database-outline" />
+    <v-icon size="x-large" icon="mdi-database-outline" />
     <h1>Summary for Account: {{ account_id }}</h1>
     </v-row>
   </v-container>
@@ -27,8 +27,9 @@
   </v-card>
 
   <v-card
+    scroll=false
     class="summaryPage"
-    width="600"
+    width="400"
     title="Ownership"
     elevation="10"
   >
@@ -39,13 +40,30 @@
           <strong>Mailing To:</strong>
           <br />{{summaryData.owner_name}}
           <br />{{summaryData.owner_mailing_address1}}
-          <br />{{summaryData.owner_mailing_city}}, <br />{{summaryData.owner_mailing_state}}
-          {{summaryData.owner_mailing_zip}}
+          <br />{{summaryData.owner_mailing_city}}, {{summaryData.owner_mailing_state}} {{summaryData.owner_mailing_zip}}
         </p>
       </v-list-item>
-      <v-list-item :href="'https://co.crook.or.us/assessor/webform/mailing-address-change-request-form'">Change of Mailing Address Form</v-list-item>
-      <v-list-item :href="'https://geo.co.crook.or.us/portal/apps/webappviewer/index.html?id=370f5ec185b945db9d92999cef827982&query=Taxlots,Maptaxlot,{{summaryData.map_taxlot}}'">View Overview Map</v-list-item>
     </v-list>
+      <v-row class="d-flex align-center justify-center">
+        <v-card-actions>
+          <v-btn
+            block rounded="lg"
+            density="comfortable"
+            :href="'https://co.crook.or.us/assessor/webform/mailing-address-change-request-form'">
+            Change of Mailing Address Form
+          </v-btn>
+        </v-card-actions>
+
+        <v-card-actions>
+          <v-btn
+            block rounded="lg"
+            density="comfortable"
+            :href="'https://geo.co.crook.or.us/portal/apps/webappviewer/index.html?id=370f5ec185b945db9d92999cef827982&query=Taxlots,Maptaxlot,{{summaryData.map_taxlot}}'">
+            View Overview Map
+          </v-btn>
+        </v-card-actions>
+      </v-row>
+
   </v-card>
 
   <v-card
@@ -57,11 +75,20 @@
     <v-divider></v-divider>
     <v-list>
       <v-list-item><strong>Property Tax (Current Year): </strong>{{summaryData.current_property_tax}}</v-list-item>
-      <v-list-item>Get Current Balance Due (PDF)</v-list-item>
-      <v-list-item :href="'https://co.crook.or.us/tax-collection'">Pay Your Property Taxes</v-list-item>
+<!--      <v-list-item>Get Current Balance Due (PDF)</v-list-item>-->
       <v-list-item>Tax Payments & History</v-list-item>
       <v-list-item>Tax Code Area: </v-list-item>
     </v-list>
+
+    <v-card-actions>
+      <v-btn
+        block rounded="lg"
+        density="comfortable"
+        :href="'https://co.crook.or.us/tax-collection'">
+        Pay Your Property Taxes
+      </v-btn>
+    </v-card-actions>
+
   </v-card>
 
   <v-card
@@ -113,8 +140,9 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { component as VueNumber } from '@coders-tm/vue-number-format'
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
@@ -145,5 +173,9 @@ async function loadSummaryData(value) {
 <style>
 .summaryPage {
   margin: 10px;
+}
+.v-card-actions .v-btn {
+  background-color: #2196f3;
+  width: 384px;
 }
 </style>
