@@ -19,24 +19,32 @@
   >
     <v-divider></v-divider>
   <v-list>
-    <v-list-item>Mailing Name: {{summaryData.owner_name}}</v-list-item>
-    <v-list-item>Map and Tax Lot: {{summaryData.map_taxlot}}</v-list-item>
-    <v-list-item>Situs Address: </v-list-item>
-    <v-list-item>Tax Status: </v-list-item>
+    <v-list-item><strong>Mailing Name:</strong> {{summaryData.owner_name}}</v-list-item>
+    <v-list-item><strong>Map and Tax Lot: </strong>{{summaryData.map_taxlot}}</v-list-item>
+    <v-list-item><strong>Situs Address:</strong> {{summaryData.situs_address}}</v-list-item>
+    <v-list-item><strong>Tax Status: </strong>{{summaryData.tax_status}}</v-list-item>
   </v-list>
   </v-card>
 
   <v-card
     class="summaryPage"
-    width="400"
+    width="600"
     title="Ownership"
     elevation="10"
   >
     <v-divider></v-divider>
     <v-list>
-      <v-list-item>Mailing To: </v-list-item>
+      <v-list-item>
+        <p>
+          <strong>Mailing To:</strong>
+          <br />{{summaryData.owner_name}}
+          <br />{{summaryData.owner_mailing_address1}}
+          <br />{{summaryData.owner_mailing_city}}, <br />{{summaryData.owner_mailing_state}}
+          {{summaryData.owner_mailing_zip}}
+        </p>
+      </v-list-item>
       <v-list-item :href="'https://co.crook.or.us/assessor/webform/mailing-address-change-request-form'">Change of Mailing Address Form</v-list-item>
-      <v-list-item :href="'https://geo.co.crook.or.us/portal/apps/webappviewer/index.html?id=370f5ec185b945db9d92999cef827982&query=Taxlots,Maptaxlot,151629B002600'">View Overview Map</v-list-item>
+      <v-list-item :href="'https://geo.co.crook.or.us/portal/apps/webappviewer/index.html?id=370f5ec185b945db9d92999cef827982&query=Taxlots,Maptaxlot,{{summaryData.map_taxlot}}'">View Overview Map</v-list-item>
     </v-list>
   </v-card>
 
@@ -48,7 +56,7 @@
   >
     <v-divider></v-divider>
     <v-list>
-      <v-list-item>Property Tax (Current Year): </v-list-item>
+      <v-list-item><strong>Property Tax (Current Year): </strong>{{summaryData.current_property_tax}}</v-list-item>
       <v-list-item>Get Current Balance Due (PDF)</v-list-item>
       <v-list-item :href="'https://co.crook.or.us/tax-collection'">Pay Your Property Taxes</v-list-item>
       <v-list-item>Tax Payments & History</v-list-item>
