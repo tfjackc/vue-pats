@@ -2,7 +2,7 @@
 
   <v-container>
     <v-row class="d-flex align-center justify-center">
-<!--    <v-icon icon="mdi-database-outline" />-->
+    <v-icon icon="mdi-database-outline" />
     <h1>Summary for Account: {{ account_id }}</h1>
     </v-row>
   </v-container>
@@ -15,11 +15,12 @@
     width="400"
     title="Account Information"
     elevation="10"
+
   >
     <v-divider></v-divider>
   <v-list>
-    <v-list-item>Mailing Name: </v-list-item>
-    <v-list-item>Map and Tax Lot: </v-list-item>
+    <v-list-item>Mailing Name: {{summaryData.owner_name}}</v-list-item>
+    <v-list-item>Map and Tax Lot: {{summaryData.map_taxlot}}</v-list-item>
     <v-list-item>Situs Address: </v-list-item>
     <v-list-item>Tax Status: </v-list-item>
   </v-list>
@@ -102,53 +103,35 @@
 
 </template>
 
-
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import axios from 'axios';
+import { ref, reactive, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-const pats_table_query = ref();
-const account_id = ref('');
+const route = useRoute()
+const account_id = ref(route.params.account_id)
+const summaryData = ref([])
 
-async function fetchData() {
-  const propUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${account_id.value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
+onMounted(() => {
+  loadSummaryData(account_id.value)
+})
 
-  const res = await fetch(propUrl);
-  pats_table_query.value = await res.json();
-  console.log(pats_table_query.value);
+async function loadSummaryData(value) {
+
+  const propertyTableUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
+
+  axios.get(propertyTableUrl)
+    .then((response) => {
+      const propertyTableUrlResponse = response.data.features
+      for (const items of propertyTableUrlResponse) {
+        summaryData.value = items.attributes
+        console.log(summaryData.value)
+      }
+    })
+    .catch((error) => {
+      console.error("An error occurred:", error);
+    });
 }
-
-onBeforeMount(() => {
-  fetchData();
-});
-</script>
-
-<script>
-export default {
-  data: () => ({
-    // Initialise data
-    account_id: this.$route.params.account_id,
-    pats_table_query: []
-  }),
-  methods: {
-async fetchData(value) {
-  const propUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
-
-  const res = await fetch(propUrl); // Assuming this is a GET request
-
-  pats_table_query.value = await res.json();
-  console.log(pats_table_query.value);
-
-    }
-  },
-
-}
-//   data () {
-//     return {
-//       account_id: this.$route.params.account_id,
-//       pats_table_query: []
-//     }
-//   }
-// }
 </script>
 
 <style>
