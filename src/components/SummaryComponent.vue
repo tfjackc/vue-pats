@@ -12,7 +12,7 @@
 
   <v-card
     class="summaryPage"
-    width="400"
+    width="450"
     title="Account Information"
     elevation="10"
 
@@ -29,7 +29,7 @@
   <v-card
     scroll=false
     class="summaryPage"
-    width="400"
+    width="450"
     title="Ownership"
     elevation="10"
   >
@@ -68,7 +68,7 @@
 
   <v-card
     class="summaryPage"
-    width="400"
+    width="450"
     title="Taxes"
     elevation="10"
   >
@@ -76,8 +76,8 @@
     <v-list>
       <v-list-item><strong>Property Tax (Current Year): </strong>{{summaryData.current_property_tax}}</v-list-item>
 <!--      <v-list-item>Get Current Balance Due (PDF)</v-list-item>-->
-      <v-list-item>Tax Payments & History</v-list-item>
-      <v-list-item>Tax Code Area: </v-list-item>
+<!--      <v-list-item>Tax Payments & History</v-list-item>-->
+      <v-list-item><strong>Tax Code Area:</strong> 00{{summaryData.tax_code_area}}</v-list-item>
     </v-list>
 
     <v-card-actions>
@@ -93,21 +93,22 @@
 
   <v-card
     class="summaryPage"
-    width="400"
+    width="450"
     title="Assessment"
     elevation="10"
   >
     <v-divider></v-divider>
     <v-list>
-      <v-list-item>Assessor Property Description: </v-list-item>
-      <v-list-item>Assessor Acres: </v-list-item>
-      <v-list-item>Property Class: </v-list-item>
+      <v-list-item>  <strong>Assessor Property Description:</strong> information pop-up here</v-list-item>
+      <v-list-item>{{summaryData.subdivision}}</v-list-item>
+      <v-list-item><strong>Assessor Acres:</strong> {{summaryData.land_size_acres}}</v-list-item>
+      <v-list-item><strong>Property Class:</strong> {{summaryData.property_class}} </v-list-item>
     </v-list>
   </v-card>
 
   <v-card
     class="summaryPage"
-    width="400"
+    width="450"
     title="Zoning"
     elevation="10"
   >
@@ -121,16 +122,47 @@
 
   <v-card
     class="summaryPage"
-    width="400"
+    width="450"
     title="Valuation"
     elevation="10"
   >
     <v-divider></v-divider>
-    <v-list>
-      <v-list-item :href="'http://apps.lanecounty.org/PropertyAssessmentTaxationSearch/crook/Real/Valuation/' + account_id">Current Year Value Summary</v-list-item>
-      <v-list-item></v-list-item>
-      <v-list-item></v-list-item>
-    </v-list>
+    <v-table>
+      <thead>
+      <tr>
+        <th class="text-left">
+          Category
+        </th>
+        <th class="text-left">
+          Value
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Land</td>
+        <td>${{summaryData.rmv_land}}</td>
+      </tr>
+      <tr>
+        <td>Structures</td>
+        <td>${{summaryData.rmv_improvements}}</td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td>${{summaryData.rmv_total}}</td>
+      </tr>
+      </tbody>
+    </v-table>
+
+    <v-card-actions>
+      <v-btn
+        block rounded="lg"
+        density="comfortable"
+        :href="'http://apps.lanecounty.org/PropertyAssessmentTaxationSearch/crook/Real/Valuation/' + account_id">
+        Current Year Value Summary
+      </v-btn>
+    </v-card-actions>
+
   </v-card>
     </v-row>
   </v-container>
@@ -177,5 +209,8 @@ async function loadSummaryData(value) {
 .v-card-actions .v-btn {
   background-color: #2196f3;
   width: 384px;
+}
+h1 {
+  margin-left: 10px;
 }
 </style>
