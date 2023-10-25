@@ -176,7 +176,6 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { component as VueNumber } from '@coders-tm/vue-number-format'
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
@@ -210,7 +209,7 @@ async function loadSummaryData(value) {
 }
 .v-card-actions .v-btn {
   background-color: #2196f3;
-  width: 384px;
+  width: 434px;
 }
 h1 {
   margin-left: 10px;
