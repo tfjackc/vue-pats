@@ -32,10 +32,12 @@ export const usePropertyStore = defineStore('property', {
 export const usePropertyValuesStore = defineStore('property_values', {
   state: () => ({
     property_values: [],
+    years: [],
+    rmv_total: []
   }),
   getters: {
     getPropertyValues(state){
-      return state.property_values
+      return state.property_values, state.years, state.rmv_total
     }
   },
   actions: {
@@ -45,7 +47,8 @@ export const usePropertyValuesStore = defineStore('property_values', {
         const response = await axios.get(propertyValuesUrl);
         for (const layer of response.data.features) {
           this.property_values.push(layer.attributes)
-          console.log(layer)
+          this.years.push(layer.attributes.year)
+          this.rmv_total.push(layer.attributes.rmv_total)
         }
       } catch (error) {
         alert(error)
