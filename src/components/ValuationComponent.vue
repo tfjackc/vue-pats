@@ -7,13 +7,18 @@
           <h1>Valuation for Account: {{ account_id }}</h1>
         </v-row>
         <v-row class="justify-center">
-<!--        <p v-for="items in get_table" :key="items.id">-->
-<!--          {{ items }}-->
-<!--        </p>-->
+
+          <v-data-table :items="property_values"
+                        :headers="headers"
+          ></v-data-table>
+
+          <div class="d-flex flex-wrap">
+          <div v-for="rows in property_values" :key="rows.id"></div>
+          </div>
+
+
           <p v-for="values in property_values"
              :key="values.id">{{ values }}</p>
-
-
 
 <!--          <v-table>-->
 <!--            <thead>-->
@@ -95,20 +100,21 @@ const account_id = ref(route.params.account_id)
 const store_table = usePropertyValuesStore()
 const { property_values } = storeToRefs(store_table)
 // const itemsPerPage  = ref(10)
-// const headers = ref([
-//   {
-//     title: 'Property Valuation',
-//     align: 'start',
-//     sortable: false,
-//     key: 'id',
-//   },
-//   { title: 'Real Market Value - Land', key: 'rmv_land', align: 'end' },
-//   { title: 'Real Market Value - Structure', key: 'rmv_impr', align: 'end' },
-//   { title: 'Total Real Market Value', key: 'rmv_total', align: 'end' },
-//   { title: 'Total Assessed Value', key: 'total_av', align: 'end' },
-//   { title: 'Maximum Assessed Value', key: 'max_av', align: 'end' },
-//   { title: 'Exemptions', key: 'exempt', align: 'end' },
-// ])
+const headers = ref([
+  // {
+  //   title: 'Property Valuation',
+  //   align: 'start',
+  //   sortable: true,
+  //   key: 'id',
+  // },
+  { title: 'Year', key: 'year', align: 'end' },
+  { title: 'Real Market Value - Land', key: 'rmv_land', align: 'end' },
+  { title: 'Real Market Value - Structure', key: 'rmv_impr', align: 'end' },
+  { title: 'Total Real Market Value', key: 'rmv_total', align: 'end' },
+  { title: 'Total Assessed Value', key: 'total_av', align: 'end' },
+  { title: 'Maximum Assessed Value', key: 'max_av', align: 'end' },
+  { title: 'Exemptions', key: 'exempt', align: 'end' },
+])
 onMounted(() => {
   store_table.fetchPropertyValues(account_id.value)
 })
