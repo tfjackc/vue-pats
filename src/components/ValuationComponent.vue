@@ -7,10 +7,9 @@
           <h1>Valuation for Account: {{ account_id }}</h1>
         </v-row>
         <v-row class="justify-center">
-<!--        <p v-for="i in summaryData" :key="summaryData.id">-->
-<!--          {{ i }}-->
-<!--        </p>-->
-          <p v-if="valuationData.length > 0">{{ valuationData.value.property_table }}</p>
+        <p v-for="items in get_table" :key="items.id">
+          {{ items }}
+        </p>
         </v-row>
       </v-col>
     </v-container>
@@ -19,16 +18,27 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import { ref, onMounted } from 'vue'
+//import axios from 'axios';
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { loadSummaryData } from "@/assets/propertyTable";
+import { storeToRefs} from "pinia";
+import { usePropertyTableStore } from "@/store/app";
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
-const data = loadSummaryData(account_id.value)
-const valuationData = ref(data)
-console.log(valuationData)
+const store_table = usePropertyTableStore()
+const get_table = computed(() => {
+  return store_table.getPropertyTable;
+});
+
+onMounted(() => {
+  store_table.fetchPropertyTable(account_id.value);
+})
+
+
+// const data = usePropertyTableStore(account_id.value)
+// const valuationData = ref(data)
+// console.log(valuationData)
 
 </script>
 
