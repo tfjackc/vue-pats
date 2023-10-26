@@ -2,45 +2,52 @@
 import { defineStore } from 'pinia'
 //import { ref } from 'vue'
 import axios from "axios";
-// export const usePropertyTableStore = defineStore('property_table', {
-//   state: (account) => {
-//     const table = ref(null)
-//     const propertyTableUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${account}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
-//
-//     axios.get(propertyTableUrl)
-//       .then((response) => {
-//         const propertyTableUrlResponse = response.data.features
-//         for (const items of propertyTableUrlResponse) {
-//           table.value = items.attributes
-//         }
-//       })
-//       .catch((error) => {
-//         console.error("An error occurred:", error);
-//       })
-//
-//     return ({ table });
-//   },
-// })
 
-
-export const usePropertyTableStore = defineStore('property_table', {
+export const usePropertyStore = defineStore('property', {
   state: () => ({
-    property_table: [],
+    property: [],
   }),
   getters: {
-    getPropertyTable(state){
-      return state.property_table
+    getProperty(state){
+      return state.property
     }
   },
   actions: {
-    async fetchPropertyTable(account) {
+    fetchProperty: async function (account) {
       try {
-        const propertyTableUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${account}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
-
-        const data = await axios.get(propertyTableUrl)
-        this.property_table = data.data
+        const propertyUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${account}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
+        const response = await axios.get(propertyUrl);
+        for (const layer of response.data.features) {
+          this.property = layer.attributes
+        }
+      } catch (error) {
+        alert(error)
+        console.log(error)
       }
-      catch (error) {
+    }
+  },
+})
+
+
+export const usePropertyValuesStore = defineStore('property_values', {
+  state: () => ({
+    property_values: [],
+  }),
+  getters: {
+    getPropertyValues(state){
+      return state.property_values
+    }
+  },
+  actions: {
+    fetchPropertyValues: async function (account) {
+      try {
+        const propertyValuesUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/12/query?where=account_id+%3D+%27${account}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`
+        const response = await axios.get(propertyValuesUrl);
+        for (const layer of response.data.features) {
+          this.property_values.push(layer.attributes)
+          console.log(layer)
+        }
+      } catch (error) {
         alert(error)
         console.log(error)
       }

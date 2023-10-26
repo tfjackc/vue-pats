@@ -20,10 +20,10 @@
   >
     <v-divider></v-divider>
   <v-list>
-    <v-list-item><strong>Mailing Name:</strong> {{summaryData.owner_name}}</v-list-item>
-    <v-list-item><strong>Map and Tax Lot: </strong>{{summaryData.map_taxlot}}</v-list-item>
-    <v-list-item><strong>Situs Address:</strong> {{summaryData.situs_address}}</v-list-item>
-    <v-list-item><strong>Tax Status: </strong>{{summaryData.tax_status}}</v-list-item>
+    <v-list-item><strong>Mailing Name:</strong> {{property.owner_name}}</v-list-item>
+    <v-list-item><strong>Map and Tax Lot: </strong>{{property.map_taxlot}}</v-list-item>
+    <v-list-item><strong>Situs Address:</strong> {{property.situs_address}}</v-list-item>
+    <v-list-item><strong>Tax Status: </strong>{{property.tax_status}}</v-list-item>
   </v-list>
   </v-card>
 
@@ -39,9 +39,9 @@
       <v-list-item>
         <p>
           <strong>Mailing To:</strong>
-          <br />{{summaryData.owner_name}}
-          <br />{{summaryData.owner_mailing_address1}}
-          <br />{{summaryData.owner_mailing_city}}, {{summaryData.owner_mailing_state}} {{summaryData.owner_mailing_zip}}
+          <br />{{property.owner_name}}
+          <br />{{property.owner_mailing_address1}}
+          <br />{{property.owner_mailing_city}}, {{property.owner_mailing_state}} {{property.owner_mailing_zip}}
         </p>
       </v-list-item>
     </v-list>
@@ -59,7 +59,7 @@
           <v-btn
             block rounded="lg"
             density="comfortable"
-            :href="'https://geo.co.crook.or.us/portal/apps/webappviewer/index.html?id=370f5ec185b945db9d92999cef827982&query=Taxlots,Maptaxlot,{{summaryData.map_taxlot}}'">
+            :href="'https://geo.co.crook.or.us/portal/apps/webappviewer/index.html?id=370f5ec185b945db9d92999cef827982&query=Taxlots,Maptaxlot,{{property.map_taxlot}}'">
             View Overview Map
           </v-btn>
         </v-card-actions>
@@ -75,10 +75,10 @@
   >
     <v-divider></v-divider>
     <v-list>
-      <v-list-item><strong>Property Tax (Current Year): </strong>{{summaryData.current_property_tax}}</v-list-item>
+      <v-list-item><strong>Property Tax (Current Year): </strong>{{property.current_property_tax}}</v-list-item>
 <!--      <v-list-item>Get Current Balance Due (PDF)</v-list-item>-->
 <!--      <v-list-item>Tax Payments & History</v-list-item>-->
-      <v-list-item><strong>Tax Code Area:</strong> 00{{summaryData.tax_code_area}}</v-list-item>
+      <v-list-item><strong>Tax Code Area:</strong> 00{{property.tax_code_area}}</v-list-item>
     </v-list>
 
     <v-card-actions>
@@ -101,9 +101,9 @@
     <v-divider></v-divider>
     <v-list>
       <v-list-item>  <strong>Assessor Property Description:</strong> information pop-up here</v-list-item>
-      <v-list-item>{{summaryData.subdivision}}</v-list-item>
-      <v-list-item><strong>Assessor Acres:</strong> {{summaryData.land_size_acres}}</v-list-item>
-      <v-list-item><strong>Property Class:</strong> {{summaryData.property_class}} </v-list-item>
+      <v-list-item>{{property.subdivision}}</v-list-item>
+      <v-list-item><strong>Assessor Acres:</strong> {{property.land_size_acres}}</v-list-item>
+      <v-list-item><strong>Property Class:</strong> {{property.property_class}} </v-list-item>
     </v-list>
   </v-card>
 
@@ -142,15 +142,15 @@
       <tbody>
       <tr>
         <td>Land</td>
-        <td>${{summaryData.rmv_land}}</td>
+        <td>${{property.rmv_land}}</td>
       </tr>
       <tr>
         <td>Structures</td>
-        <td>${{summaryData.rmv_improvements}}</td>
+        <td>${{property.rmv_improvements}}</td>
       </tr>
       <tr>
         <td>Total</td>
-        <td>${{summaryData.rmv_total}}</td>
+        <td>${{property.rmv_total}}</td>
       </tr>
       </tbody>
     </v-table>
@@ -173,34 +173,19 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { usePropertyStore } from '@/store/app'
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
-const summaryData = ref([])
+const store_table = usePropertyStore()
 
+const { property } = storeToRefs(store_table)
 onMounted(() => {
-  loadSummaryData(account_id.value)
+  store_table.fetchProperty(account_id.value)
 })
-
-async function loadSummaryData(value) {
-
-  const propertyTableUrl = `https://geo.co.crook.or.us/server/rest/services/publicApp/Pats_Tables/MapServer/11/query?where=account_id+%3D+%27${value}%27&text=&objectIds=&time=&timeRelation=esriTimeRelationOverlaps&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=false&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&sqlFormat=none&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson`;
-
-  axios.get(propertyTableUrl)
-    .then((response) => {
-      const propertyTableUrlResponse = response.data.features
-      for (const items of propertyTableUrlResponse) {
-        summaryData.value = items.attributes
-        console.log(summaryData.value)
-      }
-    })
-    .catch((error) => {
-      console.error("An error occurred:", error);
-    });
-}
 </script>
 
 <style>

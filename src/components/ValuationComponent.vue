@@ -7,9 +7,76 @@
           <h1>Valuation for Account: {{ account_id }}</h1>
         </v-row>
         <v-row class="justify-center">
-        <p v-for="items in get_table" :key="items.id">
-          {{ items }}
-        </p>
+<!--        <p v-for="items in get_table" :key="items.id">-->
+<!--          {{ items }}-->
+<!--        </p>-->
+          <p v-for="values in property_values"
+             :key="values.id">{{ values }}</p>
+
+
+
+<!--          <v-table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--              <th class="text-left">-->
+<!--                Valuations-->
+<!--              </th>-->
+<!--              <th class="text-left">-->
+<!--                Calories-->
+<!--              </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr-->
+<!--              v-for="values in property_values"-->
+<!--              :key="values.id"-->
+<!--            >-->
+<!--              <td>{{ item.year }}</td>-->
+<!--              <td>{{ item.rmv_land }}</td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </v-table>-->
+
+
+<!--          <v-table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--              <th class="text-left">-->
+<!--                Real Market Value - Land-->
+<!--              </th>-->
+<!--              <th class="text-left">-->
+<!--                Real Market Value - Structure-->
+<!--              </th>-->
+<!--              <th class="text-left">-->
+<!--                Total Real Market Value-->
+<!--              </th>-->
+<!--              <th class="text-left">-->
+<!--                Total Assessed Value-->
+<!--              </th>-->
+<!--              <th class="text-left">-->
+<!--                Maximum Assessed Value-->
+<!--              </th>-->
+<!--              <th class="text-left">-->
+<!--                Exemptions-->
+<!--              </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr>-->
+<!--              <td>Land</td>-->
+<!--              <td>${{property.rmv_land}}</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>Structures</td>-->
+<!--              <td>${{property.rmv_improvements}}</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>Total</td>-->
+<!--              <td>${{property.rmv_total}}</td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </v-table>-->
+
         </v-row>
       </v-col>
     </v-container>
@@ -18,30 +85,35 @@
 </template>
 
 <script setup>
-//import axios from 'axios';
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { storeToRefs} from "pinia";
-import { usePropertyTableStore } from "@/store/app";
+import { storeToRefs } from 'pinia'
+import { usePropertyValuesStore } from '@/store/app'
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
-const store_table = usePropertyTableStore()
-const get_table = computed(() => {
-  return store_table.getPropertyTable;
-});
-
+const store_table = usePropertyValuesStore()
+const { property_values } = storeToRefs(store_table)
+// const itemsPerPage  = ref(10)
+// const headers = ref([
+//   {
+//     title: 'Property Valuation',
+//     align: 'start',
+//     sortable: false,
+//     key: 'id',
+//   },
+//   { title: 'Real Market Value - Land', key: 'rmv_land', align: 'end' },
+//   { title: 'Real Market Value - Structure', key: 'rmv_impr', align: 'end' },
+//   { title: 'Total Real Market Value', key: 'rmv_total', align: 'end' },
+//   { title: 'Total Assessed Value', key: 'total_av', align: 'end' },
+//   { title: 'Maximum Assessed Value', key: 'max_av', align: 'end' },
+//   { title: 'Exemptions', key: 'exempt', align: 'end' },
+// ])
 onMounted(() => {
-  store_table.fetchPropertyTable(account_id.value);
+  store_table.fetchPropertyValues(account_id.value)
 })
 
-
-// const data = usePropertyTableStore(account_id.value)
-// const valuationData = ref(data)
-// console.log(valuationData)
-
 </script>
-
 
 <style>
 h1 {
