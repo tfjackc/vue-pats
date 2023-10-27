@@ -23,6 +23,11 @@ const routes = [
         path: '/valuation/:account_id',
         name: 'ValuationPage',
         component: () => import('@/views/ValuationPage.vue')
+      },
+      {
+        path: '/interactive_map/:account_id',
+        name: 'InteractiveMapPage',
+        component: () => import('@/views/InteractiveMapPage.vue')
       }
     ],
   },
