@@ -21,22 +21,23 @@
           </div>
 
 
-        </v-row>
+          <Line v-if="chartData" :data="chartData" />
 
+        </v-row>
       </v-col>
     </v-container>
   </v-fade-transition>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { shallowRef, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { usePropertyValuesStore } from '@/store/app'
 const route = useRoute()
 const account_id = ref(route.params.account_id)
 const store_table = usePropertyValuesStore()
-const { property_values } = storeToRefs(store_table)
+const { property_values, years, rmv_total, max_av } = storeToRefs(store_table)
 const itemsPerPage  = ref(11)
 const headers = ref([
   { title: 'Year', key: 'year', align: 'end' },
@@ -47,10 +48,38 @@ const headers = ref([
   { title: 'Maximum Assessed Value', key: 'max_av', align: 'end' },
   { title: 'Exemptions', key: 'exempt', align: 'end' },
 ])
+import { Line } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js'
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
+
+//const name = 'LineChart'
+const loaded = ref(false)
+const chartData = shallowRef(null)
 
 onMounted(() => {
   property_values.value = []
-  store_table.fetchPropertyValues(account_id.value)
+  rmv_total.value = []
+  years.value = []
+  try {
+    store_table.fetchPropertyValues(account_id.value).then(() => {
+      chartData.value = {
+        labels:  years.value,
+        datasets: [
+          {
+            label: 'Total Real Market Value',
+            borderColor: 'rgb(75, 192, 192)',
+            color: 'rgb(75, 192, 192)',
+            fill: false,
+            data: rmv_total.value
+          }
+        ]
+      }
+      loaded.value = true
+      console.log(chartData.value)
+    })
+  } catch (error) {
+    // Handle the error.
+  }
 })
 </script>
 

@@ -33,11 +33,12 @@ export const usePropertyValuesStore = defineStore('property_values', {
   state: () => ({
     property_values: [],
     years: [],
-    rmv_total: []
+    rmv_total: [],
+    max_av: []
   }),
   getters: {
     getPropertyValues(state){
-      return state.property_values, state.years, state.rmv_total
+      return state.property_values, state.years, state.rmv_total, state.max_av
     }
   },
   actions: {
@@ -49,6 +50,7 @@ export const usePropertyValuesStore = defineStore('property_values', {
           this.property_values.push(layer.attributes)
           this.years.push(layer.attributes.year)
           this.rmv_total.push(layer.attributes.rmv_total)
+          this.max_av.push(layer.attributes.max_av)
         }
       } catch (error) {
         alert(error)
