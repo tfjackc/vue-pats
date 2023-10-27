@@ -7,6 +7,7 @@
           <h1>Valuation for Account: {{ account_id }}</h1>
         </v-row>
         <v-row class="justify-center">
+          <Line v-if="chartData" :data="chartData" />
           <v-data-table
             v-if="property_values.length > 0"
             v-model:items-per-page="itemsPerPage"
@@ -19,10 +20,6 @@
           <div class="d-flex flex-wrap">
           <div v-for="rows in property_values" :key="rows.id"></div>
           </div>
-
-
-          <Line v-if="chartData" :data="chartData" />
-
         </v-row>
       </v-col>
     </v-container>
@@ -101,6 +98,6 @@ h1 {
   margin-left: 10px;
 }
 .v-data-table {
-  margin: 20px;
+  margin-top: 20px;
 }
 </style>
