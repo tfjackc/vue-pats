@@ -69,9 +69,22 @@ onMounted(() => {
             label: 'Total Real Market Value',
             borderColor: 'rgb(75, 192, 192)',
             color: 'rgb(75, 192, 192)',
+            pointStyle: 'circle',
+            pointRadius: 5,
+            pointHoverRadius: 15,
             fill: false,
             data: rmv_total.value
-          }
+          },
+          {
+            label: 'Maximum Assessed Value',
+            borderColor: '#8B48B8',
+            color: '#8B48B8',
+            pointStyle: 'circle',
+            pointRadius: 5,
+            pointHoverRadius: 15,
+            fill: false,
+            data: max_av.value
+          },
         ]
       }
       loaded.value = true
