@@ -3,9 +3,6 @@
     <Line v-if="chartData" :data="chartData" />
   </div>
 
-  <p v-if="chartData">
-    {{ chartData }}
-  </p>
 </template>
 
 <script setup>
@@ -19,7 +16,6 @@ const store_table = usePropertyValuesStore()
 const { property_values, years, rmv_total } = storeToRefs(store_table)
 // ---------above is in other component-------------
 import { Line } from 'vue-chartjs'
-
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
 
@@ -29,10 +25,12 @@ const chartData = shallowRef(null)
 
 // onMounted() hook
 onMounted(() => {
+  rmv_total.value = []
+  years.value = []
   try {
     store_table.fetchPropertyValues(account_id.value).then(() => {
       chartData.value = {
-        type: 'line',
+        labels:  years.value,
         datasets: [
           {
             label: 'Data One',

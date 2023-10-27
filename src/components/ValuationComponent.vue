@@ -19,7 +19,10 @@
           <div class="d-flex flex-wrap">
           <div v-for="rows in property_values" :key="rows.id"></div>
           </div>
+
+
         </v-row>
+
       </v-col>
     </v-container>
   </v-fade-transition>
