@@ -7,7 +7,9 @@
           <h1>Valuation for Account: {{ account_id }}</h1>
         </v-row>
         <v-row class="justify-center">
-          <Line v-if="chartData" :data="chartData" />
+          <Line v-if="chartData"
+                :data="chartData"
+                :sort-by="[{ key: 'year', order: 'asc' }]"/>
           <v-data-table
             v-if="property_values.length > 0"
             v-model:items-per-page="itemsPerPage"
@@ -48,9 +50,6 @@ const headers = ref([
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
-
-//const name = 'LineChart'
-const loaded = ref(false)
 const chartData = shallowRef(null)
 
 onMounted(() => {
@@ -84,11 +83,9 @@ onMounted(() => {
           },
         ]
       }
-      loaded.value = true
-      console.log(chartData.value)
     })
   } catch (error) {
-    // Handle the error.
+    console.log(error)
   }
 })
 </script>
