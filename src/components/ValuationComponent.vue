@@ -9,6 +9,7 @@
         <v-row class="justify-center">
           <Line v-if="chartData"
                 :data="chartData"
+                :options="chartOptions"
                 :sort-by="[{ key: 'year', order: 'asc' }]"/>
           <v-data-table
             v-if="property_values.length > 0"
@@ -51,11 +52,30 @@ import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
 const chartData = shallowRef(null)
-
+const chartOptions = ref(null)
 onMounted(() => {
   property_values.value = []
   rmv_total.value = []
   years.value = []
+  chartOptions.value = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            let label = context.dataset.label || '';
+
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed.y !== null) {
+              label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+            }
+            return label;
+          }
+        }
+      }
+    }
+  }
   try {
     store_table.fetchPropertyValues(account_id.value).then(() => {
       chartData.value = {
