@@ -3,14 +3,20 @@
   <div id="map-div"></div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from "vue";
 import MapView from "@arcgis/core/views/MapView";
 import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
 import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
 import Home from "@arcgis/core/widgets/Home";
-import Map from "@arcgis/core/Map.js";
+import Map from "@arcgis/core/Map";
+import Query from "@arcgis/core/rest/support/Query";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
+import FeatureSet from "@arcgis/core/rest/support/FeatureSet";
+import * as query from "@arcgis/core/rest/query.js";
+import Sublayer from "@arcgis/core/layers/support/Sublayer.js";
+import * as colorRendererCreator from "@arcgis/core/smartMapping/renderers/size";
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
@@ -112,6 +118,13 @@ const landGroup = new MapImageLayer({
 
 const mtLayer = landGroup.sublayers.getItemAt(1);
 
+// const query = new Query({
+//   outFields: ["*"],
+//   where: `account_id = '${account_id.value}'`
+// });
+//
+
+
 onMounted(() => {
   const viewProps = {                    // Object with property data
     container: "map-div",
@@ -125,9 +138,74 @@ onMounted(() => {
   view.ui.add(basemapToggle, "top-left");
   view.when(() => {
     map.layers.push(landGroup);
+    const mtLayer = landGroup.findSublayerById(1);
+
+    mtLayer.createFeatureLayer()
+      .then(function(featureLayer){
+        return featureLayer.load();
+      })
+      .then(createParameters);
+    })
   })
 
+
+function createParameters (featureLayer) {
+  console.log("are we here??")
+  featureLayer.queryFeatures({
+    geometry: featureLayer.geometry,
+    where: `ACCOUNT = ${account_id.value}`,
+    returnGeometry: true,
+    outFields: ["*"],
+    outSpatialReference: view.map.basemap.baseLayers.items[0].spatialReference
+  }).then((featureSet) => {
+
+    // map.layers.push(featureSet)
+    console.log(featureSet)
+    //view.goTo(featureSet.extent)
+    // view.openPopup({
+    //   features: featureSet.features
+    // });
+  })
+}
+
+// colorRendererCreator.createContinuousRenderer(colorParams.value)
+//   .then(function(response){
+//     mtLayer.renderer = response.renderer;
+//   });
+// const mtqueryfunction = async () => {
+//   console.log("in the function")
+//   const loadQuery = new Query();
+//   loadQuery.outFields = ["*"];
+//   loadQuery.returnGeometry = true;
+//   loadQuery.where = `account_id = '${account_id.value}'`;
+//   const mtLayer = landGroup.findSublayerById(1);
+
+  //const featureSet = await mtLayer.queryFeatures(loadQuery);
+  // if (featureSet.featureResult) {
+  //   console.log(featureSet.featureResult.features);
+  //
+  //   return featureSet.featureResult.features
+  //   // view.openPopup({
+  //   //   features: featureSet.featureResult.features
+  //   // })
+  // } else {
+  //   console.log("No features found for the query.");
+  // }
+// }
+
+// when a tax lot is clicked, get attribute information
+view.on("click", function(evt) {
+
+  var query = new Query();
+  query.geometry = evt.mapPoint;
+  query.outFields = ["*"];
+  query.returnGeometry = true;
+  query.spatialRelationship = "intersects";
+  mtLayer.queryFeatures(query).then(function(results) {
+    console.log(results)
+  });
 });
+
 </script>
 
 <style>
