@@ -11,6 +11,7 @@ import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
 import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
 import Home from "@arcgis/core/widgets/Home";
 import Map from "@arcgis/core/Map.js";
+import FeatureFilter from "@arcgis/core/layers/support/FeatureFilter";
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
@@ -24,9 +25,6 @@ let basemapToggle = new BasemapToggle({
   view: view,
   nextBasemap: "hybrid"
 });
-
-
-
 // return home button
 let homeWidget = new Home({
   view: view
@@ -113,6 +111,8 @@ const landGroup = new MapImageLayer({
   ]
 });
 
+const mtLayer = landGroup.sublayers.getItemAt(1);
+
 onMounted(() => {
   const viewProps = {                    // Object with property data
     container: "map-div",
@@ -127,6 +127,13 @@ onMounted(() => {
   view.when(() => {
     map.layers.push(landGroup);
   })
+
+  // view.whenLayerView(landGroup).then(function(layerView){
+  //   console.log("in layer view shit")
+  //   layerView.filter = new FeatureFilter({
+  //     where: `account_id = '\`${account_id.value}\`'`
+  //   })
+  // });
 });
 </script>
 
