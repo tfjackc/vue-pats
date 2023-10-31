@@ -1,5 +1,4 @@
 <template>
-<h1 id="map-header">Interactive Map Page</h1>
   <div id="map-div"></div>
 </template>
 
@@ -12,11 +11,7 @@ import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
 import Home from "@arcgis/core/widgets/Home";
 import Map from "@arcgis/core/Map";
 import Query from "@arcgis/core/rest/support/Query";
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import FeatureSet from "@arcgis/core/rest/support/FeatureSet";
-import * as query from "@arcgis/core/rest/query.js";
-import Sublayer from "@arcgis/core/layers/support/Sublayer.js";
-import * as colorRendererCreator from "@arcgis/core/smartMapping/renderers/size";
+import Graphic from "@arcgis/core/Graphic";
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
@@ -34,14 +29,6 @@ let basemapToggle = new BasemapToggle({
 let homeWidget = new Home({
   view: view
 });
-
-// adds the home widget to the top left corner of the MapView
-
-//
-// let legend = new Legend({
-//   view: view,
-//   container: "legend"
-// });
 
 const taxlotRenderer = {
   type: "simple",
@@ -89,7 +76,8 @@ const landGroup = new MapImageLayer({
       popupTemplate: {
         title: "{MAPTAXLOT}",
         content: "Owner Name: {OWNER_NAME} <br /> Zone: {ZONE} <br /> Account: {ACCOUNT} <br /> PATS Link: <a href={PATS_LINK}>PATS Link</a> <br /> Tax Map Link: <a href={TAX_MAP_LINK}>Tax Map Link</a> <br /> Tax Card Link: <a href={TAX_CARD_LINK}>Tax Card Link</a>",
-      }
+      },
+        //definitionExpression: `ACCOUNT = ${account_id.value}`
     },
     {
       id: 3,
@@ -116,107 +104,105 @@ const landGroup = new MapImageLayer({
   ]
 });
 
-const mtLayer = landGroup.sublayers.getItemAt(1);
-
-// const query = new Query({
-//   outFields: ["*"],
-//   where: `account_id = '${account_id.value}'`
-// });
-//
-
+const taxlotLayer = landGroup.findSublayerById(1);
 
 onMounted(() => {
-  const viewProps = {                    // Object with property data
+  const viewProps = {
     container: "map-div",
     map: map,
     zoom: 12,
-    center: [ -120.8345, 44.2998 ]
+    center: [ -120.8345, 44.2998 ],
+      popupEnabled: true,
+      popup: {
+          dockEnabled: true,
+          dockOptions: {
+              // dock popup at bottom-right side of view
+              buttonEnabled: false,
+              breakpoint: false,
+              position: "bottom-right"
+          }
+      }
   };
 
-  view.set(viewProps);
-  view.ui.add(homeWidget, "top-left");
-  view.ui.add(basemapToggle, "top-left");
-  view.when(() => {
-    map.layers.push(landGroup);
-    const mtLayer = landGroup.findSublayerById(1);
+    view.set(viewProps);
+    view.ui.add(homeWidget, "top-left");
+    view.ui.add(basemapToggle, "top-left");
+    view.when(() => {
+        view.map.add(landGroup);
 
-    mtLayer.createFeatureLayer()
-      .then(function(featureLayer){
-        return featureLayer.load();
-      })
-      .then(createParameters);
+        taxlotLayer.createFeatureLayer()
+            .then(function(featureLayer){
+                return featureLayer.load();
+            })
+            .then(queryNewFeatureLayer);
     })
-  })
+})
 
-
-function createParameters (featureLayer) {
-  console.log("are we here??")
-  featureLayer.queryFeatures({
-    geometry: featureLayer.geometry,
-    where: `ACCOUNT = ${account_id.value}`,
-    returnGeometry: true,
-    outFields: ["*"],
-    outSpatialReference: view.map.basemap.baseLayers.items[0].spatialReference
-  }).then((featureSet) => {
-
-    // map.layers.push(featureSet)
-    console.log(featureSet)
-    //view.goTo(featureSet.extent)
-    // view.openPopup({
-    //   features: featureSet.features
-    // });
-  })
-}
-
-// colorRendererCreator.createContinuousRenderer(colorParams.value)
-//   .then(function(response){
-//     mtLayer.renderer = response.renderer;
-//   });
-// const mtqueryfunction = async () => {
-//   console.log("in the function")
-//   const loadQuery = new Query();
-//   loadQuery.outFields = ["*"];
-//   loadQuery.returnGeometry = true;
-//   loadQuery.where = `account_id = '${account_id.value}'`;
-//   const mtLayer = landGroup.findSublayerById(1);
-
-  //const featureSet = await mtLayer.queryFeatures(loadQuery);
-  // if (featureSet.featureResult) {
-  //   console.log(featureSet.featureResult.features);
-  //
-  //   return featureSet.featureResult.features
-  //   // view.openPopup({
-  //   //   features: featureSet.featureResult.features
-  //   // })
-  // } else {
-  //   console.log("No features found for the query.");
-  // }
-// }
-
-// when a tax lot is clicked, get attribute information
-view.on("click", function(evt) {
-
-  var query = new Query();
-  query.geometry = evt.mapPoint;
-  query.outFields = ["*"];
-  query.returnGeometry = true;
-  query.spatialRelationship = "intersects";
-  mtLayer.queryFeatures(query).then(function(results) {
-    console.log(results)
-  });
+//create graphic for mouse point click
+const pointGraphic = new Graphic({
+    symbol: {
+        type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+        color: [0, 0, 139],
+        outline: {
+            color: [255, 255, 255],
+            width: 1.5
+        }
+    }
 });
 
+// Create graphic for distance buffer
+const bufferGraphic = new Graphic({
+    symbol: {
+        type: "simple-fill", // autocasts as new SimpleFillSymbol()
+        color: [173, 216, 230, 0.8],
+        outline: {
+            // autocasts as new SimpleLineSymbol()
+            color: [255, 255, 255],
+            width: 1
+        }
+    }
+});
+
+function queryNewFeatureLayer (taxlotLayer) {
+    taxlotLayer.popupTemplate = taxlotLayer.createPopupTemplate();
+    let queryTaxlots = taxlotLayer.createQuery();
+    queryTaxlots.geometry = taxlotLayer.geometry
+    queryTaxlots.where = `ACCOUNT = ${account_id.value}`
+    queryTaxlots.outFields = ["*"]
+    queryTaxlots.returnQueryGeometry = true
+    queryTaxlots.outSpatialReference = view.map.basemap.baseLayers.items[0].spatialReference
+    taxlotLayer.queryFeatures(queryTaxlots).then((featureSet) => {
+        displayResults(featureSet);
+    })
+
+}
+function displayResults(fset) {
+ fset.features.forEach(function(taxlots) {
+     bufferGraphic.geometry = taxlots.geometry;
+     view.graphics.add(bufferGraphic);
+     view.goTo(bufferGraphic.geometry.extent)
+     pointGraphic.geometry = taxlots.geometry.centroid;
+     view.graphics.add(pointGraphic);
+
+     console.log(fset.features)
+
+     view.openPopup({
+         location: pointGraphic.geometry,
+         features: fset.features,
+         featureMenuOpen: true
+     })
+
+ })
+}
+// when a tax lot is clicked, get attribute information
+    view.on("click", function (evt) {
+        var query = new Query();
+        query.geometry = evt.mapPoint;
+        query.outFields = ["*"];
+        query.returnGeometry = true;
+        query.spatialRelationship = "intersects";
+        taxlotLayer.queryFeatures(query).then(function (results) {
+            console.log(results)
+        });
+    });
 </script>
-
-<style>
-@import "https://js.arcgis.com/4.28/@arcgis/core/assets/esri/themes/light/main.css";
-
-#map-div {
-  height: 100%;
-  width: 100%;
-}
-
-#map-header {
-  margin-left: 15px;
-}
-</style>

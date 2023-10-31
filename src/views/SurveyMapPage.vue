@@ -1,11 +1,11 @@
 <template>
   <Sidebar />
-  <InteractiveMapComponent />
+  <SurveyMapComponent />
 </template>
 
 <script setup>
 import Sidebar from "@/layouts/default/Sidebar.vue";
-import InteractiveMapComponent from "@/components/InteractiveMapComponent.vue";
+import SurveyMapComponent from "@/components/SurveyMapComponent.vue";
 </script>
 
 <style scoped>

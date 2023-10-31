@@ -28,6 +28,11 @@ const routes = [
         path: '/interactive_map/:account_id',
         name: 'InteractiveMapPage',
         component: () => import('@/views/InteractiveMapPage.vue')
+      },
+      {
+        path: '/surveys/:account_id',
+        name: 'SurveyMapPage',
+        component: () => import('@/views/SurveyMapPage.vue')
       }
     ],
   },

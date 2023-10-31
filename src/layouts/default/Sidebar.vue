@@ -24,7 +24,11 @@
             title="Interactive Map"
             value="interactive_map"
             router :to="{ name : 'InteractiveMapPage' }"></v-list-item>
-          <v-list-item prepend-icon="mdi-ruler-square-compass" title="Surveys" value="surveys"></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-ruler-square-compass"
+            title="Surveys"
+            value="surveys"
+            router :to="{ name : 'SurveyMapPage' }"></v-list-item>
         </v-list>
       </v-navigation-drawer>
 </template>
