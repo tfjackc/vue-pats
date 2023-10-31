@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 import { onMounted, ref } from "vue";
 import MapView from "@arcgis/core/views/MapView";
 import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
-import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
+//import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
 import Home from "@arcgis/core/widgets/Home";
 import Map from "@arcgis/core/Map";
 import Query from "@arcgis/core/rest/support/Query";
@@ -21,11 +21,12 @@ map.basemap = "topo-vector";
 
 const view = new MapView();
 
-let basemapToggle = new BasemapToggle({
-  view: view,
-  nextBasemap: "hybrid"
-});
+// let basemapToggle = new BasemapToggle({
+//   view: view,
+//   nextBasemap: "hybrid"
+// });
 // return home button
+
 let homeWidget = new Home({
   view: view
 });
@@ -126,7 +127,7 @@ onMounted(() => {
 
     view.set(viewProps);
     view.ui.add(homeWidget, "top-left");
-    view.ui.add(basemapToggle, "top-left");
+   // view.ui.add(basemapToggle, "top-left");
     view.when(() => {
         view.map.add(landGroup);
 
@@ -194,7 +195,7 @@ function displayResults(fset) {
 
  })
 }
-// when a tax lot is clicked, get attribute information
+// when a tax lot is clicked, get attribute information // for future use
     view.on("click", function (evt) {
         var query = new Query();
         query.geometry = evt.mapPoint;

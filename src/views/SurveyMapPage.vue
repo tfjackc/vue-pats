@@ -8,6 +8,6 @@ import Sidebar from "@/layouts/default/Sidebar.vue";
 import SurveyMapComponent from "@/components/SurveyMapComponent.vue";
 </script>
 
-<style scoped>
+<style>
 @import "src/styles/mapping.css";
 </style>
