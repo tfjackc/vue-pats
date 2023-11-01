@@ -6,6 +6,4 @@
   //
 </script>
 
-<style>
-@import 'src/styles/main.css';
-</style>
+
