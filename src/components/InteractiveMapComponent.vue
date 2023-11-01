@@ -21,12 +21,6 @@ map.basemap = "topo-vector";
 
 const view = new MapView();
 
-// let basemapToggle = new BasemapToggle({
-//   view: view,
-//   nextBasemap: "hybrid"
-// });
-// return home button
-
 let homeWidget = new Home({
   view: view
 });
