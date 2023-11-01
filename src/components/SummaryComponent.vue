@@ -6,17 +6,12 @@
     <v-icon size="x-large" icon="mdi-database-outline" />
     <h1>Summary for Account: {{ account_id }}</h1>
     </v-row>
-<!--  </v-container>-->
-
-<!--  <v-container>-->
   <v-row class="justify-center">
-
   <v-card
     class="summaryPage"
     width="450"
     title="Account Information"
     elevation="10"
-
   >
     <v-divider></v-divider>
   <v-list>
@@ -26,7 +21,6 @@
     <v-list-item><strong>Tax Status: </strong>{{property.tax_status}}</v-list-item>
   </v-list>
   </v-card>
-
   <v-card
     scroll=false
     class="summaryPage"
@@ -54,7 +48,6 @@
             Change of Mailing Address Form
           </v-btn>
         </v-card-actions>
-
         <v-card-actions>
           <v-btn
             block rounded="lg"
@@ -64,9 +57,7 @@
           </v-btn>
         </v-card-actions>
       </v-row>
-
   </v-card>
-
   <v-card
     class="summaryPage"
     width="450"
@@ -80,7 +71,6 @@
 <!--      <v-list-item>Tax Payments & History</v-list-item>-->
       <v-list-item><strong>Tax Code Area:</strong> 00{{property.tax_code_area}}</v-list-item>
     </v-list>
-
     <v-card-actions>
       <v-btn
         block rounded="lg"
@@ -89,9 +79,7 @@
         Pay Your Property Taxes
       </v-btn>
     </v-card-actions>
-
   </v-card>
-
   <v-card
     class="summaryPage"
     width="450"
@@ -106,7 +94,6 @@
       <v-list-item><strong>Property Class:</strong> {{property.property_class}} </v-list-item>
     </v-list>
   </v-card>
-
   <v-card
     class="summaryPage"
     width="450"
@@ -120,7 +107,6 @@
       <v-list-item :href="'https://www.codepublishing.com/OR/CrookCounty/#!/CrookCounty18/CrookCounty1840.html#18.40'">Zone Link</v-list-item>
     </v-list>
   </v-card>
-
   <v-card
     class="summaryPage"
     width="450"
@@ -154,7 +140,6 @@
       </tr>
       </tbody>
     </v-table>
-
     <v-card-actions>
       <v-btn
         block rounded="lg"
@@ -163,20 +148,17 @@
         Current Year Value Summary
       </v-btn>
     </v-card-actions>
-
   </v-card>
     </v-row>
     </v-col>
   </v-container>
-
     </v-fade-transition>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { usePropertyStore } from '@/store/app'
+import { usePropertyStore } from '@/store/propertyAPI'
 
 const route = useRoute()
 const account_id = ref(route.params.account_id)
@@ -189,14 +171,5 @@ onMounted(() => {
 </script>
 
 <style>
-.summaryPage {
-  margin: 10px;
-}
-.v-card-actions .v-btn {
-  background-color: #2196f3;
-  width: 434px;
-}
-h1 {
-  margin-left: 10px;
-}
+
 </style>

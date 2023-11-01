@@ -8,6 +8,6 @@ import Sidebar from "@/layouts/default/Sidebar.vue";
 import InteractiveMapComponent from "@/components/InteractiveMapComponent.vue";
 </script>
 
-<style scoped>
-@import "src/styles/mapping.css";
+<style>
+
 </style>

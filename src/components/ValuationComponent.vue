@@ -33,7 +33,7 @@
 import { shallowRef, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { usePropertyValuesStore } from '@/store/app'
+import { usePropertyValuesStore } from '@/store/propertyValuesAPI'
 const route = useRoute()
 const account_id = ref(route.params.account_id)
 const store_table = usePropertyValuesStore()
@@ -110,11 +110,3 @@ onMounted(() => {
 })
 </script>
 
-<style>
-h1 {
-  margin-left: 10px;
-}
-.v-data-table {
-  margin-top: 20px;
-}
-</style>

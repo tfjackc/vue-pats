@@ -78,7 +78,6 @@ const landGroup = new MapImageLayer({
         title: "{MAPTAXLOT}",
         content: "Owner Name: {OWNER_NAME} <br /> Zone: {ZONE} <br /> Account: {ACCOUNT} <br /> PATS Link: <a href={PATS_LINK}>PATS Link</a> <br /> Tax Map Link: <a href={TAX_MAP_LINK}>Tax Map Link</a> <br /> Tax Card Link: <a href={TAX_CARD_LINK}>Tax Card Link</a>",
       },
-        //definitionExpression: `ACCOUNT = ${account_id.value}`
     },
     {
       id: 3,
@@ -207,3 +206,7 @@ function displayResults(fset) {
         });
     });
 </script>
+
+<style>
+
+</style>
